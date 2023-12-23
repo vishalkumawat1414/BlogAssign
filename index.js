@@ -5,24 +5,16 @@ const DBconnect = require("./DBconnect");
 const mongoSanitize = require("express-mongo-sanitize");
 const rateLimit = require("express-rate-limit");
 dotenv.config("./.env");
-var cors = require("cors");
 
 const authRouter = require("./routes/authRouter");
-const postRouter = require("./routes/postRouter")
+const postRouter = require("./routes/postRouter");
 
 const app = express();
 app.use(bodyParser.json());
 
 //middlewares
 
-app.use(mongoSanitize());//to sanitize user input
-// app.use(cookieParser()); // to store refresh token
-app.use(
-	cors({
-		credentials: true,
-		origin: "http://localhost:3000",
-	}),
-);
+app.use(mongoSanitize()); //to sanitize user input
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, // 15 minutes
@@ -36,8 +28,6 @@ module.exports = app;
 // router
 app.use("/blogauth", authRouter);
 app.use("/blogposts", postRouter);
-
-
 
 //for data base connecting
 DBconnect();
